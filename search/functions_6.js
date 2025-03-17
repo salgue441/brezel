@@ -1,0 +1,9 @@
+var searchData=
+[
+  ['make_5ferr_158',['make_err',['../namespacebrezel_1_1utils.html#a4f614a23bc658eb7ea5887ff0be036eb',1,'brezel::utils::make_err(E &amp;&amp;error)'],['../namespacebrezel_1_1utils.html#ad96d4cfc2cf95170982db93df566f5f1',1,'brezel::utils::make_err(E &amp;&amp;error)']]],
+  ['make_5ferror_159',['make_error',['../namespacebrezel_1_1utils.html#a657b38a403178a88c51926d09899abf8',1,'brezel::utils']]],
+  ['make_5fok_160',['make_ok',['../namespacebrezel_1_1utils.html#a2f28907dcc5f874b467aa784bdf6f401',1,'brezel::utils::make_ok(T &amp;&amp;value)'],['../namespacebrezel_1_1utils.html#ae0718ea3cd0c17d40e9343ccf317826f',1,'brezel::utils::make_ok()']]],
+  ['map_161',['map',['../classbrezel_1_1utils_1_1_expected.html#a7640294e8e105e61eee855b777fa6d06',1,'brezel::utils::Expected::map(F &amp;&amp;fn) const &amp;'],['../classbrezel_1_1utils_1_1_expected.html#aec377cb66be7ba0adfc820a4215fa8b8',1,'brezel::utils::Expected::map(F &amp;&amp;fn) &amp;&amp;'],['../classbrezel_1_1utils_1_1_expected_3_01void_00_01_e_01_4.html#a2abb4ebb67c60a44b63042966d6f62da',1,'brezel::utils::Expected&lt; void, E &gt;::map()']]],
+  ['map_5ferror_162',['map_error',['../classbrezel_1_1utils_1_1_expected.html#adc7a452fbbe71c50b4cbeccd1f72e427',1,'brezel::utils::Expected::map_error(F &amp;&amp;fn) const &amp;'],['../classbrezel_1_1utils_1_1_expected.html#a22c943b0727f981bd2bd0a4f1b463053',1,'brezel::utils::Expected::map_error(F &amp;&amp;fn) &amp;&amp;'],['../classbrezel_1_1utils_1_1_expected_3_01void_00_01_e_01_4.html#ab7c2e97f349df4c69e8cb3b67118b54b',1,'brezel::utils::Expected&lt; void, E &gt;::map_error(F &amp;&amp;fn) const &amp;'],['../classbrezel_1_1utils_1_1_expected_3_01void_00_01_e_01_4.html#a599d7fc5d7755ceaf50d13e573a99d3e',1,'brezel::utils::Expected&lt; void, E &gt;::map_error(F &amp;&amp;fn) &amp;&amp;']]],
+  ['message_163',['message',['../classbrezel_1_1utils_1_1_error.html#a7941cf5b0522f0fb4968c3e3e6444a5b',1,'brezel::utils::Error']]]
+];

@@ -1,0 +1,10 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classbrezel_1_1utils_1_1_device_error.html" title="Device error." alt="" coords="5,152,188,179"/>
+<area shape="rect" id="node2" href="$classbrezel_1_1utils_1_1_error.html" title="Bae class for all Brezel errors." alt="" coords="236,152,373,179"/>
+<area shape="rect" id="node3" href="$classbrezel_1_1utils_1_1_index_error.html" title="Index error (for out&#45;of&#45;bounds access)" alt="" coords="443,5,616,32"/>
+<area shape="rect" id="node4" href="$classbrezel_1_1utils_1_1_invalid_argument_error.html" title="Invalid argument error." alt="" coords="422,57,637,98"/>
+<area shape="rect" id="node5" href="$classbrezel_1_1utils_1_1_memory_error.html" title="Memory error." alt="" coords="434,123,625,149"/>
+<area shape="rect" id="node6" href="$classbrezel_1_1utils_1_1_not_implemented_error.html" title="Not implemented error." alt="" coords="421,174,637,215"/>
+<area shape="rect" id="node7" href="$classbrezel_1_1utils_1_1_runtime_error.html" title="Runtime error." alt="" coords="433,240,625,267"/>
+<area shape="rect" id="node8" href="$classbrezel_1_1utils_1_1_shape_error.html" title="Shape error." alt="" coords="441,291,618,317"/>
+</map>

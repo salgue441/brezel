@@ -1,0 +1,11 @@
+<map id="brezel::utils::Error" name="brezel::utils::Error">
+<area shape="rect" id="node1" title="Bae class for all Brezel errors." alt="" coords="168,173,305,200"/>
+<area shape="rect" id="node3" href="$classbrezel_1_1utils_1_1_device_error.html" title="Device error." alt="" coords="370,5,553,32"/>
+<area shape="rect" id="node4" href="$classbrezel_1_1utils_1_1_index_error.html" title="Index error (for out&#45;of&#45;bounds access)" alt="" coords="375,56,548,83"/>
+<area shape="rect" id="node5" href="$classbrezel_1_1utils_1_1_invalid_argument_error.html" title="Invalid argument error." alt="" coords="354,107,569,149"/>
+<area shape="rect" id="node6" href="$classbrezel_1_1utils_1_1_memory_error.html" title="Memory error." alt="" coords="366,173,557,200"/>
+<area shape="rect" id="node7" href="$classbrezel_1_1utils_1_1_not_implemented_error.html" title="Not implemented error." alt="" coords="353,225,569,266"/>
+<area shape="rect" id="node8" href="$classbrezel_1_1utils_1_1_runtime_error.html" title="Runtime error." alt="" coords="365,291,557,317"/>
+<area shape="rect" id="node9" href="$classbrezel_1_1utils_1_1_shape_error.html" title="Shape error." alt="" coords="373,341,550,368"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,173,120,200"/>
+</map>
