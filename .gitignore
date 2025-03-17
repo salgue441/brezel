@@ -1,0 +1,114 @@
+# Build directories
+/build/
+/bin/
+/lib/
+/out/
+/cmake-build-*/
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.user
+*.suo
+*.VC.db
+*.VC.opendb
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Code coverage files
+*.gcov
+*.gcda
+*.gcno
+coverage.info
+coverage_report/
+
+# Documentation generated files
+/docs/html/
+/docs/latex/
+/docs/xml/
+
+# Python (for potential scripts)
+__pycache__/
+*.py[cod]
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Docker
+.dockerignore
+
+# Dependencies logs
+conanbuildinfo.txt
+conaninfo.txt
+dependencies.log
+
+# Packaging
+*.tar.gz
+*.zip
+*.deb
+*.rpm
+
+# OS-specific
+Thumbs.db
+.DS_Store
+  
