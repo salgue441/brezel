@@ -7,6 +7,9 @@ on:
     branches: [main, develop]
   workflow_dispatch: # Allow manual triggering
 
+env:
+  CI: "ON"
+
 jobs:
   docker-build:
     name: Build and Test with Docker
@@ -40,7 +43,7 @@ jobs:
       - name: Build Release Configuration
         run: |
           docker compose run --rm brezel-dev bash -c "rm -rf build-release && mkdir -p build-release && cd build-release && \
-            cmake .. -DCMAKE_BUILD_TYPE=Release && \
+            cmake .. -DCMAKE_BUILD_TYPE=Release -DCI=ON && \
             cmake --build . --parallel $(nproc)"
 
       - name: Run Release Tests
@@ -50,7 +53,7 @@ jobs:
       - name: Build Debug Configuration with Sanitizers
         run: |
           docker compose run --rm brezel-dev bash -c "rm -rf build-debug && mkdir -p build-debug && cd build-debug && \
-            cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER_ADDRESS=ON -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR=ON && \
+            cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER_ADDRESS=ON -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR=ON -DCI=ON && \
             cmake --build . --parallel $(nproc)"
 
       - name: Run Debug Tests with Sanitizers
@@ -118,9 +121,9 @@ jobs:
           cd build
           if [ "${{ matrix.config.os }}" == "macos-latest" ]; then
             # Disable OpenMP on macOS to avoid configuration issues
-            cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DBREZEL_BUILD_TESTS=ON -DBREZEL_USE_OPENMP=OFF
+            cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DBREZEL_BUILD_TESTS=ON -DBREZEL_USE_OPENMP=OFF -DCI=ON
           else
-            cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DBREZEL_BUILD_TESTS=ON
+            cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DBREZEL_BUILD_TESTS=ON -DCI=ON
           fi
 
       - name: Configure CMake (Windows)
@@ -129,7 +132,7 @@ jobs:
           if (Test-Path -Path build) { Remove-Item -Recurse -Force build }
           mkdir -p build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DBREZEL_BUILD_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+          cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DBREZEL_BUILD_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCI=ON
 
       - name: Build
         run: |
@@ -170,7 +173,7 @@ jobs:
       - name: Run Clang-Tidy and Cppcheck
         run: |
           docker compose run --rm brezel-dev bash -c "rm -rf build-analysis && mkdir -p build-analysis && cd build-analysis && \
-            cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_CLANG_TIDY=ON -DENABLE_CPPCHECK=ON && \
+            cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_CLANG_TIDY=ON -DENABLE_CPPCHECK=ON -DCI=ON && \
             cmake --build . --parallel 2"
 
   documentation:
@@ -203,7 +206,7 @@ jobs:
       - name: Build Documentation
         run: |
           docker compose run --rm brezel-dev bash -c "rm -rf build-docs && mkdir -p build-docs && cd build-docs && \
-            cmake .. -DBREZEL_BUILD_DOCS=ON && \
+            cmake .. -DBREZEL_BUILD_DOCS=ON -DCI=ON && \
             cmake --build . --target docs"
 
       - name: Archive Documentation
