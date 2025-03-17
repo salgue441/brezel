@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
   ca-certificates \
   doxygen \
   graphviz \
+  sudo \
   && rm -rf /var/lib/apt/lists/*
 
 # Install spdlog from source
@@ -40,10 +41,20 @@ RUN git clone --depth 1 --branch v3.4.0 https://github.com/catchorg/Catch2.git /
   && cmake --install . \
   && cd / && rm -rf /tmp/catch2
 
-# Create a non-root user to run the build
-RUN useradd -m developer
+# Create a user with the same UID/GID as the GitHub Actions runner
+ARG USER_ID=1001
+ARG GROUP_ID=1001
+RUN groupadd -g ${GROUP_ID} developer && \
+  useradd -u ${USER_ID} -g ${GROUP_ID} -m -s /bin/bash developer && \
+  echo "developer ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Set up working directory with correct permissions
+RUN mkdir -p /home/developer/brezel && \
+  chown -R developer:developer /home/developer
+
+# Switch to developer user
 USER developer
-WORKDIR /home/developer
+WORKDIR /home/developer/brezel
 
 # Make sure we're using the correct bash path
 SHELL ["/bin/bash", "-c"]

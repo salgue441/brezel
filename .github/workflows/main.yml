@@ -37,12 +37,13 @@ jobs:
             docker compose version
           fi
 
-      - name: Build Docker image
-        run: docker compose build
+      - name: Build Docker image with correct user ID
+        run: |
+          docker compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)
 
       - name: Build Release Configuration
         run: |
-          docker compose run --rm brezel-dev /bin/bash -c "rm -rf build-release && mkdir -p build-release && cd build-release && \
+          docker compose run --rm brezel-dev /bin/bash -c "mkdir -p build-release && cd build-release && \
             cmake .. -DCMAKE_BUILD_TYPE=Release -DCI=ON && \
             cmake --build . --parallel $(nproc)"
 
@@ -52,7 +53,7 @@ jobs:
 
       - name: Build Debug Configuration with Sanitizers
         run: |
-          docker compose run --rm brezel-dev /bin/bash -c "rm -rf build-debug && mkdir -p build-debug && cd build-debug && \
+          docker compose run --rm brezel-dev /bin/bash -c "mkdir -p build-debug && cd build-debug && \
             cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER_ADDRESS=ON -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR=ON -DCI=ON && \
             cmake --build . --parallel $(nproc)"
 
@@ -167,12 +168,13 @@ jobs:
             docker compose version
           fi
 
-      - name: Build Docker image
-        run: docker compose build
+      - name: Build Docker image with correct user ID
+        run: |
+          docker compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)
 
       - name: Run Clang-Tidy and Cppcheck
         run: |
-          docker compose run --rm brezel-dev bash -c "rm -rf build-analysis && mkdir -p build-analysis && cd build-analysis && \
+          docker compose run --rm brezel-dev /bin/bash -c "mkdir -p build-analysis && cd build-analysis && \
             cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_CLANG_TIDY=ON -DENABLE_CPPCHECK=ON -DCI=ON && \
             cmake --build . --parallel 2"
 
@@ -200,12 +202,13 @@ jobs:
             docker compose version
           fi
 
-      - name: Build Docker image
-        run: docker compose build
+      - name: Build Docker image with correct user ID
+        run: |
+          docker compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)
 
       - name: Build Documentation
         run: |
-          docker compose run --rm brezel-dev bash -c "rm -rf build-docs && mkdir -p build-docs && cd build-docs && \
+          docker compose run --rm brezel-dev /bin/bash -c "mkdir -p build-docs && cd build-docs && \
             cmake .. -DBREZEL_BUILD_DOCS=ON -DCI=ON && \
             cmake --build . --target docs"
 
