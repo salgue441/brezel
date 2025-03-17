@@ -1,0 +1,16 @@
+/home/carlos/developer/tensor_framework/build/CMakeFiles/docker-build.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/docker-shell.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/docker-run-build.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/docker-run-tests.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/docker-clean.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/format.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/package-docker.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/package-all.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/package.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/package_source.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/edit_cache.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/rebuild_cache.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/list_install_components.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/install.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/install/local.dir
+/home/carlos/developer/tensor_framework/build/CMakeFiles/install/strip.dir
