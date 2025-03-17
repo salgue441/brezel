@@ -213,7 +213,7 @@ jobs:
             cmake --build . --target docs"
 
       - name: Archive Documentation
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: documentation
           path: build-docs/docs/html/
