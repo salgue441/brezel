@@ -22,28 +22,40 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      # Install docker-compose if not available
+      - name: Install Docker Compose
+        run: |
+          if ! command -v docker compose &> /dev/null; then
+            sudo curl -L "https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            docker-compose --version
+          else
+            echo "Docker Compose is already installed"
+            docker compose version
+          fi
+
       - name: Build Docker image
-        run: docker-compose build
+        run: docker compose build
 
       - name: Build Release Configuration
         run: |
-          docker-compose run --rm brezel-dev bash -c "mkdir -p build-release && cd build-release && \
+          docker compose run --rm brezel-dev bash -c "mkdir -p build-release && cd build-release && \
             cmake .. -DCMAKE_BUILD_TYPE=Release && \
             cmake --build . --parallel $(nproc)"
 
       - name: Run Release Tests
         run: |
-          docker-compose run --rm brezel-dev bash -c "cd build-release && ctest --output-on-failure"
+          docker compose run --rm brezel-dev bash -c "cd build-release && ctest --output-on-failure"
 
       - name: Build Debug Configuration with Sanitizers
         run: |
-          docker-compose run --rm brezel-dev bash -c "mkdir -p build-debug && cd build-debug && \
+          docker compose run --rm brezel-dev bash -c "mkdir -p build-debug && cd build-debug && \
             cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER_ADDRESS=ON -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR=ON && \
             cmake --build . --parallel $(nproc)"
 
       - name: Run Debug Tests with Sanitizers
         run: |
-          docker-compose run --rm brezel-dev bash -c "cd build-debug && ctest --output-on-failure"
+          docker compose run --rm brezel-dev bash -c "cd build-debug && ctest --output-on-failure"
 
   native-builds:
     name: ${{ matrix.config.name }}
@@ -134,12 +146,23 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Install Docker Compose
+        run: |
+          if ! command -v docker compose &> /dev/null; then
+            sudo curl -L "https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            docker-compose --version
+          else
+            echo "Docker Compose is already installed"
+            docker compose version
+          fi
+
       - name: Build Docker image
-        run: docker-compose build
+        run: docker compose build
 
       - name: Run Clang-Tidy and Cppcheck
         run: |
-          docker-compose run --rm brezel-dev bash -c "mkdir -p build-analysis && cd build-analysis && \
+          docker compose run --rm brezel-dev bash -c "mkdir -p build-analysis && cd build-analysis && \
             cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_CLANG_TIDY=ON -DENABLE_CPPCHECK=ON && \
             cmake --build . --parallel 2"
 
@@ -156,12 +179,23 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Install Docker Compose
+        run: |
+          if ! command -v docker compose &> /dev/null; then
+            sudo curl -L "https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            docker-compose --version
+          else
+            echo "Docker Compose is already installed"
+            docker compose version
+          fi
+
       - name: Build Docker image
-        run: docker-compose build
+        run: docker compose build
 
       - name: Build Documentation
         run: |
-          docker-compose run --rm brezel-dev bash -c "mkdir -p build-docs && cd build-docs && \
+          docker compose run --rm brezel-dev bash -c "mkdir -p build-docs && cd build-docs && \
             cmake .. -DBREZEL_BUILD_DOCS=ON && \
             cmake --build . --target docs"
 

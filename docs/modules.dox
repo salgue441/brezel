@@ -1,0 +1,61 @@
+/**
+ * @defgroup core Core
+ * @brief Core tensor functionality and operations
+ * 
+ * The core module provides the fundamental Tensor class and basic operations.
+ */
+
+/**
+ * @defgroup autograd Automatic Differentiation
+ * @brief Automatic differentiation for gradient-based optimization
+ * 
+ * The autograd module implements automatic differentiation (backpropagation)
+ * to compute gradients for use in optimization algorithms.
+ */
+
+/**
+ * @defgroup nn Neural Networks
+ * @brief Neural network layers and components
+ * 
+ * The nn module provides building blocks for creating neural networks,
+ * including layers, activation functions, and loss functions.
+ */
+
+/**
+ * @defgroup optim Optimizers
+ * @brief Optimization algorithms for training
+ * 
+ * The optim module implements various optimization algorithms for
+ * training neural networks and other models.
+ */
+
+/**
+ * @defgroup utils Utilities
+ * @brief Utility functions and classes
+ * 
+ * The utils module provides various utility functions and classes
+ * including error handling, logging, and string formatting.
+ */
+
+/**
+ * @defgroup parallel Parallel Processing
+ * @brief Parallel processing utilities
+ * 
+ * The parallel module implements tools for multi-threading and
+ * parallel execution of tensor operations.
+ */
+
+/**
+ * @defgroup memory Memory Management
+ * @brief Memory management utilities
+ * 
+ * The memory module provides tools for efficient memory allocation
+ * and management for tensor operations.
+ */
+
+/**
+ * @defgroup examples Examples
+ * @brief Example code showing usage of the library
+ * 
+ * The examples demonstrate how to use the various components of the library.
+ */

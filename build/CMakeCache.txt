@@ -56,6 +56,15 @@ BREZEL_BUILD_TESTS:BOOL=ON
 //Compile optional performance extensions
 BREZEL_COMPILE_EXTENSIONS:BOOL=OFF
 
+//Build documentation as part of the default build
+BREZEL_DOCS_WITH_BUILD:BOOL=OFF
+
+//Include examples in documentation
+BREZEL_DOCS_WITH_EXAMPLES:BOOL=ON
+
+//Include tests in documentation
+BREZEL_DOCS_WITH_TESTS:BOOL=OFF
+
 //Enable performance profiling
 BREZEL_ENABLE_PROFILING:BOOL=OFF
 
@@ -381,6 +390,12 @@ DOCKER_COMPOSE_EXECUTABLE:FILEPATH=/mnt/c/Program Files/Docker/Docker/resources/
 //Path to a program.
 DOCKER_EXECUTABLE:FILEPATH=/usr/bin/docker
 
+//Dot tool for use with Doxygen
+DOXYGEN_DOT_EXECUTABLE:FILEPATH=/usr/bin/dot
+
+//Doxygen documentation generation tool (https://www.doxygen.nl)
+DOXYGEN_EXECUTABLE:FILEPATH=/usr/bin/doxygen
+
 //Enable static analysis with clang-tidy
 ENABLE_CLANG_TIDY:BOOL=OFF
 
@@ -669,6 +684,10 @@ CPACK_SOURCE_TXZ-ADVANCED:INTERNAL=1
 CPACK_SOURCE_TZ-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CPACK_SOURCE_ZIP
 CPACK_SOURCE_ZIP-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DOXYGEN_DOT_EXECUTABLE
+DOXYGEN_DOT_EXECUTABLE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DOXYGEN_EXECUTABLE
+DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
 //Details about finding BLAS
 FIND_PACKAGE_MESSAGE_DETAILS_BLAS:INTERNAL=[/usr/lib/x86_64-linux-gnu/libopenblas.so][v()]
 //Details about finding LAPACK

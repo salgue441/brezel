@@ -1,0 +1,16 @@
+file(GLOB_RECURSE DOC_IMAGES "${CMAKE_CURRENT_SOURCE_DIR}/images/*")
+
+if(DOC_IMAGES)
+  file(COPY ${DOC_IMAGES} DESTINATION "${CMAKE_BINARY_DIR}/docs/images")
+endif()
+
+file(GLOB_RECURSE MARKDOWN_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.md")
+
+foreach(MARKDOWN_FILE ${MARKDOWN_FILES})
+  get_filename_component(FILENAME ${MARKDOWN_FILE} NAME)
+  configure_file(
+    ${MARKDOWN_FILE}
+    "${CMAKE_BINARY_DIR}/docs/${FILENAME}"
+    COPYONLY
+  )
+endforeach()

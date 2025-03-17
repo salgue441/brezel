@@ -29,6 +29,7 @@ option(BREZEL_COMPILE_EXTENSIONS "Compile optional performance extensions" OFF)
 option(BREZEL_ENABLE_PROFILING "Enable performance profiling" OFF)
 option(BREZEL_USE_DOCKER "Use Docker for building and testing" ON)
 option(BREZEL_BUILD_DOCS "Build documentation" OFF)
+option(BREZEL_DOCS_WITH_BUILD "Build documentation as part of the default build" OFF)
 
 # Add CMake modules path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -39,6 +40,7 @@ include(cmake/Sanitizers.cmake)
 include(cmake/StaticAnalyzers.cmake)
 include(cmake/Dependencies.cmake)
 include(cmake/Workflow.cmake)
+include(cmake/Documentation.cmake)
 
 # Set output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -133,8 +135,9 @@ if(BREZEL_USE_DOCKER)
   brezel_add_docker_targets()
 endif()
 
-# Add code formatting target
+# Add code formatting target and documentation
 brezel_enable_formatting()
+brezel_setup_documentation()
 
 # Installation
 include(GNUInstallDirs)
