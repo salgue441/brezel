@@ -116,7 +116,12 @@ jobs:
           rm -rf build
           mkdir -p build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DBREZEL_BUILD_TESTS=ON
+          if [ "${{ matrix.config.os }}" == "macos-latest" ]; then
+            # Disable OpenMP on macOS to avoid configuration issues
+            cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DBREZEL_BUILD_TESTS=ON -DBREZEL_USE_OPENMP=OFF
+          else
+            cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DBREZEL_BUILD_TESTS=ON
+          fi
 
       - name: Configure CMake (Windows)
         if: matrix.config.os == 'windows-latest'
