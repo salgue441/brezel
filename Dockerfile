@@ -45,5 +45,6 @@ RUN useradd -m developer
 USER developer
 WORKDIR /home/developer
 
-# Set the entrypoint to bash
-ENTRYPOINT ["/bin/bash"]
+# Make sure we're using the correct bash path
+SHELL ["/bin/bash", "-c"]
+CMD ["/bin/bash"]
