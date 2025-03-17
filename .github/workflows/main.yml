@@ -208,8 +208,8 @@ jobs:
 
       - name: Build Documentation
         run: |
-          docker compose run --rm brezel-dev /bin/bash -c "mkdir -p build-docs && cd build-docs && \
-            cmake .. -DBREZEL_BUILD_DOCS=ON -DCI=ON && \
+          docker compose run --rm brezel-dev /bin/bash -c "rm -rf build-docs && mkdir -p build-docs && cd build-docs && \
+            cmake .. -DBREZEL_BUILD_DOCS=ON -DCMAKE_INSTALL_DOCDIR=docs/html -DCI=ON && \
             cmake --build . --target docs"
 
       - name: Archive Documentation

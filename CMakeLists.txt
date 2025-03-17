@@ -41,6 +41,7 @@ include(cmake/StaticAnalyzers.cmake)
 include(cmake/Dependencies.cmake)
 include(cmake/Workflow.cmake)
 include(cmake/Documentation.cmake)
+include(cmake/Packaging.cmake)
 
 # Set output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -173,42 +174,3 @@ else()
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/brezel
   )
 endif()
-
-# Documentation
-if(BREZEL_BUILD_DOCS)
-  find_package(Doxygen)
-
-  if(DOXYGEN_FOUND)
-    # Doxygen configuration
-    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/docs)
-    set(DOXYGEN_PROJECT_NAME "Brezel")
-    set(DOXYGEN_PROJECT_NUMBER ${PROJECT_VERSION})
-    set(DOXYGEN_PROJECT_BRIEF "A modern C++ tensor framework")
-    set(DOXYGEN_EXTRACT_ALL YES)
-    set(DOXYGEN_EXTRACT_PRIVATE YES)
-    set(DOXYGEN_EXTRACT_PACKAGE YES)
-    set(DOXYGEN_EXTRACT_STATIC YES)
-    set(DOXYGEN_EXTRACT_LOCAL_CLASSES YES)
-    set(DOXYGEN_RECURSIVE YES)
-    set(DOXYGEN_USE_MDFILE_AS_MAINPAGE README.md)
-    set(DOXYGEN_GENERATE_HTML YES)
-    set(DOXYGEN_GENERATE_XML YES)
-    set(DOXYGEN_GENERATE_LATEX NO)
-    set(DOXYGEN_JAVADOC_AUTOBRIEF YES)
-    set(DOXYGEN_QT_AUTOBRIEF YES)
-    set(DOXYGEN_WARN_AS_ERROR YES)
-
-    # Generate Doxyfile
-    doxygen_add_docs(docs
-      ${CMAKE_CURRENT_SOURCE_DIR}/include
-      ${CMAKE_CURRENT_SOURCE_DIR}/README.md
-      ALL
-      COMMENT "Generating API documentation with Doxygen"
-    )
-  else()
-    message(STATUS "Doxygen not found, documentation will not be built")
-  endif()
-endif()
-
-# Packaging
-include(cmake/Packaging.cmake)

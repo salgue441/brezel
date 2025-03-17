@@ -48,13 +48,16 @@ function(brezel_setup_documentation)
     @ONLY
   )
 
-  # Define the documentation target
-  add_custom_target(docs
-    COMMAND ${DOXYGEN_EXECUTABLE} "${CMAKE_BINARY_DIR}/docs/Doxyfile"
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMENT "Generating API documentation with Doxygen"
-    VERBATIM
-  )
+  # Check if docs target already exists
+  if(NOT TARGET docs)
+    # Define the documentation target
+    add_custom_target(docs
+      COMMAND ${DOXYGEN_EXECUTABLE} "${CMAKE_BINARY_DIR}/docs/Doxyfile"
+      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+      COMMENT "Generating API documentation with Doxygen"
+      VERBATIM
+    )
+  endif()
 
   # Add a target to serve the documentation locally (if Python is available)
   find_package(Python3 QUIET COMPONENTS Interpreter)
@@ -75,11 +78,13 @@ function(brezel_setup_documentation)
   endif()
 
   # Installation of documentation
-  install(
-    DIRECTORY "${DOXYGEN_OUTPUT_DIR}/html"
-    DESTINATION ${CMAKE_INSTALL_DOCDIR}
-    OPTIONAL
-  )
+  if(NOT DEFINED ENV{CI} AND NOT CI)
+    install(
+      DIRECTORY "${DOXYGEN_OUTPUT_DIR}/html"
+      DESTINATION ${CMAKE_INSTALL_DOCDIR}
+      OPTIONAL
+    )
+  endif()
 
   message(STATUS "Documentation setup complete. Run 'cmake --build . --target docs' to generate.")
 endfunction()
