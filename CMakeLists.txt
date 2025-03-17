@@ -118,10 +118,10 @@ if(BREZEL_COMPILE_EXTENSIONS)
 endif()
 
 # Add subdirectories for components
-# if(BREZEL_BUILD_TESTS)
-# enable_testing()
-# add_subdirectory(tests)
-# endif()
+if(BREZEL_BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
 
 # if(BREZEL_BUILD_EXAMPLES)
 # add_subdirectory(examples)

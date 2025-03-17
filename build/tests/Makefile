@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /home/carlos/developer/tensor_framework/build
 # Special rule for the target package
 package: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Run CPack packaging tool..."
-	/usr/bin/cpack --config ./CPackConfig.cmake
+	cd /home/carlos/developer/tensor_framework/build && /usr/bin/cpack --config ./CPackConfig.cmake
 .PHONY : package
 
 # Special rule for the target package
@@ -78,7 +78,7 @@ package/fast: package
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Run CPack packaging tool for source..."
-	/usr/bin/cpack --config ./CPackSourceConfig.cmake /home/carlos/developer/tensor_framework/build/CPackSourceConfig.cmake
+	cd /home/carlos/developer/tensor_framework/build && /usr/bin/cpack --config ./CPackSourceConfig.cmake /home/carlos/developer/tensor_framework/build/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -162,14 +162,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/carlos/developer/tensor_framework/build/CMakeFiles /home/carlos/developer/tensor_framework/build//CMakeFiles/progress.marks
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	cd /home/carlos/developer/tensor_framework/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/carlos/developer/tensor_framework/build/CMakeFiles /home/carlos/developer/tensor_framework/build/tests//CMakeFiles/progress.marks
+	cd /home/carlos/developer/tensor_framework/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/carlos/developer/tensor_framework/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
+	cd /home/carlos/developer/tensor_framework/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/clean
 .PHONY : clean
 
 # The main clean target
@@ -178,135 +178,18 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /home/carlos/developer/tensor_framework/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /home/carlos/developer/tensor_framework/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/carlos/developer/tensor_framework/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
-
-#=============================================================================
-# Target rules for targets named package-docker
-
-# Build rule for target.
-package-docker: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 package-docker
-.PHONY : package-docker
-
-# fast build rule for target.
-package-docker/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/package-docker.dir/build.make CMakeFiles/package-docker.dir/build
-.PHONY : package-docker/fast
-
-#=============================================================================
-# Target rules for targets named package-all
-
-# Build rule for target.
-package-all: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 package-all
-.PHONY : package-all
-
-# fast build rule for target.
-package-all/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/package-all.dir/build.make CMakeFiles/package-all.dir/build
-.PHONY : package-all/fast
-
-#=============================================================================
-# Target rules for targets named docker-build
-
-# Build rule for target.
-docker-build: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docker-build
-.PHONY : docker-build
-
-# fast build rule for target.
-docker-build/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/docker-build.dir/build.make CMakeFiles/docker-build.dir/build
-.PHONY : docker-build/fast
-
-#=============================================================================
-# Target rules for targets named docker-shell
-
-# Build rule for target.
-docker-shell: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docker-shell
-.PHONY : docker-shell
-
-# fast build rule for target.
-docker-shell/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/docker-shell.dir/build.make CMakeFiles/docker-shell.dir/build
-.PHONY : docker-shell/fast
-
-#=============================================================================
-# Target rules for targets named docker-run-build
-
-# Build rule for target.
-docker-run-build: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docker-run-build
-.PHONY : docker-run-build
-
-# fast build rule for target.
-docker-run-build/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/docker-run-build.dir/build.make CMakeFiles/docker-run-build.dir/build
-.PHONY : docker-run-build/fast
-
-#=============================================================================
-# Target rules for targets named docker-run-tests
-
-# Build rule for target.
-docker-run-tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docker-run-tests
-.PHONY : docker-run-tests
-
-# fast build rule for target.
-docker-run-tests/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/docker-run-tests.dir/build.make CMakeFiles/docker-run-tests.dir/build
-.PHONY : docker-run-tests/fast
-
-#=============================================================================
-# Target rules for targets named docker-clean
-
-# Build rule for target.
-docker-clean: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docker-clean
-.PHONY : docker-clean
-
-# fast build rule for target.
-docker-clean/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/docker-clean.dir/build.make CMakeFiles/docker-clean.dir/build
-.PHONY : docker-clean/fast
-
-#=============================================================================
-# Target rules for targets named format
-
-# Build rule for target.
-format: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 format
-.PHONY : format
-
-# fast build rule for target.
-format/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/format.dir/build.make CMakeFiles/format.dir/build
-.PHONY : format/fast
-
-#=============================================================================
-# Target rules for targets named expected_test
-
-# Build rule for target.
-expected_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 expected_test
-.PHONY : expected_test
-
-# fast build rule for target.
-expected_test/fast:
-	$(MAKE) $(MAKESILENT) -f tests/unit/CMakeFiles/expected_test.dir/build.make tests/unit/CMakeFiles/expected_test.dir/build
-.PHONY : expected_test/fast
 
 # Help Target
 help:
@@ -323,15 +206,6 @@ help:
 	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... test"
-	@echo "... docker-build"
-	@echo "... docker-clean"
-	@echo "... docker-run-build"
-	@echo "... docker-run-tests"
-	@echo "... docker-shell"
-	@echo "... format"
-	@echo "... package-all"
-	@echo "... package-docker"
-	@echo "... expected_test"
 .PHONY : help
 
 
@@ -343,6 +217,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/carlos/developer/tensor_framework/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
