@@ -1,7 +1,7 @@
 # Unit tests configuration
 
 # Add expected_test executable
-add_executable(expected_test expected_test.cpp)
+add_executable(expected_test)
 
 # Link with required libraries
 target_link_libraries(expected_test PRIVATE

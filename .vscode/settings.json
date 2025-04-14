@@ -71,6 +71,15 @@
     "typeinfo": "cpp",
     "variant": "cpp",
     "format": "cpp",
-    "__nullptr": "cpp"
+    "__nullptr": "cpp",
+    "any": "cpp",
+    "complex": "cpp",
+    "typeindex": "cpp",
+    "ranges": "cpp",
+    "shared_mutex": "cpp",
+    "*.ipp": "cpp",
+    "strstream": "cpp",
+    "cfenv": "cpp",
+    "stdfloat": "cpp"
   }
 }
