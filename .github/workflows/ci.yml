@@ -30,6 +30,13 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install ninja openblas libomp
+          echo "Setting up LLVM OpenMP for macOS"
+          export CPPFLAGS="$CPPFLAGS -Xpreprocessor -fopenmp"
+          export CXXFLAGS="$CXXFLAGS -Xpreprocessor -fopenmp"
+          export LDFLAGS="$LDFLAGS -lomp"
+          echo "CPPFLAGS=$CPPFLAGS" >> $GITHUB_ENV
+          echo "CXXFLAGS=$CXXFLAGS" >> $GITHUB_ENV
+          echo "LDFLAGS=$LDFLAGS" >> $GITHUB_ENV
 
       # Cache vcpkg to speed up builds
       - name: Cache vcpkg
@@ -45,10 +52,11 @@ jobs:
           restore-keys: |
             vcpkg-${{ runner.os }}-
 
+      # Clone vcpkg with clean checkout
       - name: Clone vcpkg
         if: steps.vcpkg-cache.outputs.cache-hit != 'true'
         run: |
-          git clone https://github.com/microsoft/vcpkg.git ${{ github.workspace }}/vcpkg
+          git clone https://github.com/microsoft/vcpkg.git "${{ github.workspace }}/vcpkg"
         shell: bash
 
       # Bootstrap vcpkg based on platform
@@ -61,10 +69,25 @@ jobs:
       - name: Bootstrap vcpkg (Windows)
         if: runner.os == 'Windows'
         run: |
-          ${{ github.workspace }}/vcpkg/bootstrap-vcpkg.bat -disableMetrics
+          cd "${{ github.workspace }}\vcpkg"
+          .\bootstrap-vcpkg.bat -disableMetrics
         shell: cmd
 
-      - name: Configure CMake
+      - name: Configure CMake (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          cmake -B ${{ github.workspace }}/build -S ${{ github.workspace }} \
+                -G Ninja \
+                -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+                -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake \
+                -DBREZEL_BUILD_TESTS=ON \
+                -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp" \
+                -DOpenMP_CXX_LIB_NAMES="omp" \
+                -DOpenMP_omp_LIBRARY=$(brew --prefix libomp)/lib/libomp.dylib
+        shell: bash
+
+      - name: Configure CMake (Non-macOS)
+        if: runner.os != 'macOS'
         run: |
           cmake -B ${{ github.workspace }}/build -S ${{ github.workspace }} \
                 -G Ninja \
