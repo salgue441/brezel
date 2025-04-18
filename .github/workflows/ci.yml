@@ -19,6 +19,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Install Linux Dependencies
         if: runner.os == 'Linux'
         run: |
@@ -30,35 +31,38 @@ jobs:
         run: |
           brew install ninja openblas libomp
 
+      # Cache vcpkg to speed up builds
+      - name: Cache vcpkg
+        uses: actions/cache@v3
+        id: vcpkg-cache
+        with:
+          path: |
+            ${{ github.workspace }}/vcpkg
+            !${{ github.workspace }}/vcpkg/buildtrees
+            !${{ github.workspace }}/vcpkg/packages
+            !${{ github.workspace }}/vcpkg/downloads
+          key: vcpkg-${{ runner.os }}-${{ hashFiles('**/vcpkg.json') }}
+          restore-keys: |
+            vcpkg-${{ runner.os }}-
+
       - name: Clone vcpkg
+        if: steps.vcpkg-cache.outputs.cache-hit != 'true'
         run: |
-          if [ ! -d "${{ github.workspace }}/vcpkg" ]; then
-             git clone https://github.com/microsoft/vcpkg.git ${{ github.workspace }}/vcpkg
-             cd ${{ github.workspace }}/vcpkg
-             git checkout 7f9f0e599e8f9d09e8c3993c677eef3a87b92495
-           fi
+          git clone https://github.com/microsoft/vcpkg.git ${{ github.workspace }}/vcpkg
         shell: bash
 
-      - name: Bootstrap vcpkg
-        run: |
-          cd ${{ github.workspace }}/vcpkg
-          ./bootstrap-vcpkg.sh -disableMetrics
+      # Bootstrap vcpkg based on platform
+      - name: Bootstrap vcpkg (Unix)
         if: runner.os != 'Windows'
+        run: |
+          ${{ github.workspace }}/vcpkg/bootstrap-vcpkg.sh -disableMetrics
         shell: bash
 
       - name: Bootstrap vcpkg (Windows)
-        run: |
-          cd ${{ github.workspace }}/vcpkg
-          .\bootstrap-vcpkg.bat -disableMetrics
         if: runner.os == 'Windows'
+        run: |
+          ${{ github.workspace }}/vcpkg/bootstrap-vcpkg.bat -disableMetrics
         shell: cmd
-
-      - name: Setup vcpkg
-        uses: lukka/run-vcpkg@v11
-        id: runvcpkg
-        with:
-          vcpkgDirectory: "${{ github.workspace }}/vcpkg"
-          vcpkgGitCommitId: "7f9f0e599e8f9d09e8c3993c677eef3a87b92495"
 
       - name: Configure CMake
         run: |
@@ -70,8 +74,8 @@ jobs:
         shell: bash
 
       - name: Build
-        run: cmake --build ${{github.workspace }}/build --config ${{matrix.build_type}}
+        run: cmake --build ${{ github.workspace }}/build --config ${{ matrix.build_type }}
 
       - name: Test
-        working-directory: ${{github.workspace}}/build
-        run: ctest -C ${{matrix.build_type}} --output-on-failure
+        working-directory: ${{ github.workspace }}/build
+        run: ctest -C ${{ matrix.build_type }} --output-on-failure
