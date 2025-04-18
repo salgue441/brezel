@@ -1,0 +1,90 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "displayName": "Default Config",
+      "description": "Default build using vcpkg",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/default",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        }
+      }
+    },
+    {
+      "name": "debug",
+      "inherits": "default",
+      "displayName": "Debug",
+      "description": "Debug build with developer features",
+      "binaryDir": "${sourceDir}/build/debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BREZEL_BUILD_TESTS": "ON",
+        "BREZEL_BUILD_EXAMPLES": "ON"
+      }
+    },
+    {
+      "name": "release",
+      "inherits": "default",
+      "displayName": "Release",
+      "description": "Optimized release build",
+      "binaryDir": "${sourceDir}/build/release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "BREZEL_BUILD_TESTS": "OFF",
+        "BREZEL_BUILD_EXAMPLES": "OFF"
+      }
+    },
+    {
+      "name": "dev",
+      "inherits": "debug",
+      "displayName": "Development",
+      "description": "Development build with all features",
+      "binaryDir": "${sourceDir}/build/dev",
+      "cacheVariables": {
+        "BREZEL_BUILD_BENCHMARKS": "ON",
+        "BREZEL_BUILD_DOCS": "ON",
+        "BREZEL_USE_OPENMP": "ON",
+        "BREZEL_USE_EIGEN": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "debug",
+      "configurePreset": "debug",
+      "jobs": 0
+    },
+    {
+      "name": "release",
+      "configurePreset": "release",
+      "jobs": 0
+    },
+    {
+      "name": "dev",
+      "configurePreset": "dev",
+      "jobs": 0
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "default",
+      "configurePreset": "debug",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "jobs": 0,
+        "stopOnFailure": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    volumes:
+      - .:/workspace
+      - vcpkg_cache:/workspace/vcpkg/downloads
+      - vcpkg_installed:/workspace/vcpkg/installed
+    working_dir: /workspace
+    environment:
+      - VCPKG_ROOT=/workspace/vcpkg
+    command: /bin/bash
+
+volumes:
+  vcpkg_cache:
+  vcpkg_installed:

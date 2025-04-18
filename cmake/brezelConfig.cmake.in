@@ -2,7 +2,7 @@
 
 include(CMakeFindDependencyMacro)
 
-# Find dependencies
+# Find required dependencies
 find_dependency(fmt REQUIRED)
 find_dependency(Threads REQUIRED)
 
@@ -13,7 +13,9 @@ endif()
 
 if(@BREZEL_USE_BLAS@)
     find_dependency(BLAS REQUIRED)
-    find_dependency(LAPACK REQUIRED)
+    if(@BREZEL_WITH_LAPACK@)
+        find_dependency(LAPACK REQUIRED)
+    endif()
 endif()
 
 if(@BREZEL_USE_CUDA@)
@@ -38,12 +40,19 @@ set(brezel_VERSION_MINOR @PROJECT_VERSION_MINOR@)
 set(brezel_VERSION_PATCH @PROJECT_VERSION_PATCH@)
 
 # Check if components are requested
-foreach(comp ${brezel_FIND_COMPONENTS})
-    if(NOT ";@BREZEL_COMPONENTS@;" MATCHES ";${comp};")
-        set(brezel_FOUND FALSE)
-        set(brezel_NOT_FOUND_MESSAGE "Requested component '${comp}' is not available in brezel.")
-    endif()
-endforeach()
+set(brezel_FOUND TRUE)
+if(brezel_FIND_COMPONENTS)
+    foreach(comp ${brezel_FIND_COMPONENTS})
+        if(NOT ";@BREZEL_COMPONENTS@;" MATCHES ";${comp};")
+            if(brezel_FIND_REQUIRED_${comp})
+                set(brezel_FOUND FALSE)
+                set(brezel_NOT_FOUND_MESSAGE "Required brezel component '${comp}' is not available.")
+            elseif(NOT brezel_FIND_QUIETLY)
+                message(STATUS "Optional brezel component '${comp}' is not available.")
+            endif()
+        endif()
+    endforeach()
+endif()
 
 # Report version and found status
 if(NOT brezel_FIND_QUIETLY)

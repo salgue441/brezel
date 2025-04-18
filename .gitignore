@@ -1,26 +1,44 @@
 # Build directories
-/build/
-/bin/
-/lib/
+/build*/
 /out/
-/cmake-build-*/
+/install/
+/_build*/
+/CMakeUserPresets.json
 
-# Compiled Object files
+# vcpkg
+/vcpkg/
+/vcpkg_installed/
+
+# IDEs and editors
+/.vs/
+/.vscode/
+/.idea/
+/.cache/
+/compile_commands.json
+/.clangd/
+/*~
+*.swp
+*.swo
+
+# Prerequisites
+*.d
+
+# Compiled object files
 *.slo
 *.lo
 *.o
 *.obj
 
-# Precompiled Headers
+# Precompiled headers
 *.gch
 *.pch
 
-# Compiled Dynamic libraries
+# Compiled dynamic libraries
 *.so
 *.dylib
 *.dll
 
-# Compiled Static libraries
+# Compiled static libraries
 *.lai
 *.la
 *.a
@@ -31,84 +49,15 @@
 *.out
 *.app
 
-# CMake generated files
-CMakeCache.txt
-CMakeFiles/
-CMakeScripts/
-Testing/
-Makefile
-cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
-_deps/
-
-# IDE and editor files
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-.DS_Store
-*.user
-*.suo
-*.VC.db
-*.VC.opendb
-
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Code coverage files
-*.gcov
-*.gcda
-*.gcno
-coverage.info
-coverage_report/
-
-# Documentation generated files
+# Generated documentation
 /docs/html/
 /docs/latex/
 /docs/xml/
 
-# Python (for potential scripts)
-__pycache__/
-*.py[cod]
-*.so
-.Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
+# Environment files
+.env
+.env.local
 
-# Docker
-.dockerignore
-
-# Dependencies logs
-conanbuildinfo.txt
-conaninfo.txt
-dependencies.log
-
-# Packaging
-*.tar.gz
-*.zip
-*.deb
-*.rpm
-
-# OS-specific
-Thumbs.db
+# OS specific files
 .DS_Store
-  
+Thumbs.db

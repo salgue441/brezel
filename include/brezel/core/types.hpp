@@ -1,290 +1,234 @@
 #pragma once
 
-#include <complex>
-#include <concepts>
+/**
+ * @file types.hpp
+ * @brief Core type definitions for the Brezel tensor framework
+ * @version 0.1
+ * @date 2025-04-18
+ *
+ * @copyright Copyright (c) 2025
+ *
+ * This file contains fundamental type definitions used throughout the
+ * Brezel framework, including shape, strides, data types, and device types.
+ */
+
+#include <array>
 #include <cstdint>
+#include <initializer_list>
+#include <ostream>
 #include <string>
-#include <type_traits>
 #include <vector>
 
 namespace brezel {
 /**
- * @brief Common types
+ * @brief Index type used for tensor dimensions and indexing
+ *
+ * Using int64_t allows addressing large tensors and avoids
+ * the need for casting between index types
  */
-using index_t = std::int64_t;           ///< Type used for tensor indices
-using size_t = std::size_t;             ///< Type used for sizes and dimensions
-using shape_t = std::vector<index_t>;   ///< Type representing tensor shapes
-using stride_t = std::vector<index_t>;  ///< Type representing tensor strides
-using byte_t = std::uint8_t;            ///< Type used for raw byte data
+using index_t = int64_t;
 
 /**
- * @brief Device types supported by the framework
+ * @brief Shape type representing tensor dimensions
+ *
+ * A shape is a vector of indices defining the size of each dimension.
+ * For example, a 2x3x4 tensor has a shape of {2, 3, 4}
+ */
+using shape_t = std::vector<index_t>;
+
+/**
+ * @brief Stride type representing memory layout
+ *
+ * Strides define the memory step size along each dimension.
+ * For example, a 2x3 row-major tensor has strides of {3, 1}.
+ */
+using stride_t = std::vector<index_t>;
+
+/**
+ * @brief Enumeration for supported data types
+ */
+enum class dtype_t {
+    Float32,   ///< 32-bit floating point (float)
+    Float64,   ///< 64-bit floating point (double)
+    Int32,     ///< 32-bit signed integer (int32_t)
+    Int64,     ///< 64-bit signed integer (int64_t)
+    Uint8,     ///< 8-bit unsigned integer (uint8_t)
+    Bool,      ///< Boolean,
+    Complex64  ///< Complex number with float32 real and imaginary parts
+};
+
+/**
+ * @brief Enumeration of supported device types
  */
 enum class DeviceType {
-    CPU,    ///< CPU device (default)
-    CUDA,   ///< NVIDIA CUDA device
-    MPS,    ///< Apple Metal Performance Shaders device
-    OpenCL  ///< OpenCL device
+    CPU,  ///< CPU device
+    CUDA  ///< CUDA device
 };
 
 /**
- * @brief Data types supported by the framework
+ * @brief Memory layout ordering for tensors
  */
-enum class DataType {
-    Bool,       ///< Boolean type
-    Uint8,      ///< 8-bit unsigned integer
-    Int8,       ///< 8-bit signed integer
-    Int16,      ///< 16-bit signed integer
-    Int32,      ///< 32-bit signed integer
-    Int64,      ///< 64-bit signed integer
-    Float16,    ///< 16-bit floating point (half precision)
-    Float32,    ///< 32-bit floating point (single precision)
-    Float64,    ///< 64-bit floating point (double precision)
-    Complex32,  ///< Complex number with single precision components
-    Complex64   ///< Complex number with double precision components
+enum class MemoryLayout {
+    RowMajor,    ///< Row-major (C-style) layout
+    ColumnMajor  ///< Column-major (Fortran-style) layout
 };
 
 /**
- * @brief Layout types for tensor memory
- */
-enum class Layout {
-    Strided,  ///< Standard strided memory layout (default)
-    Sparse,   ///< Sparse memory layout
-    COO,      ///< Coordinate format sparse layout
-    CSR       ///< Compressed sparse row format
-};
-
-/**
- * @brief Mapping from DataType to C++ type
+ * @brief Convert dtype to string representation
  *
- * @tparam dtype The DataType enum value
+ * @param dtype Data type to convert
+ * @return std::string String representation of the data type
  */
-template <DataType dtype>
-struct DataTypeToNative {};
-
-// Specialization for each supported data type
-template <>
-struct DataTypeToNative<DataType::Bool> {
-    using type = bool;
-};
-
-template <>
-struct DataTypeToNative<DataType::Uint8> {
-    using type = std::uint8_t;
-};
-
-template <>
-struct DataTypeToNative<DataType::Int8> {
-    using type = std::int8_t;
-};
-
-template <>
-struct DataTypeToNative<DataType::Int16> {
-    using type = std::int16_t;
-};
-
-template <>
-struct DataTypeToNative<DataType::Int32> {
-    using type = std::int32_t;
-};
-
-template <>
-struct DataTypeToNative<DataType::Int64> {
-    using type = std::int64_t;
-};
-
-template <>
-struct DataTypeToNative<DataType::Float32> {
-    using type = float;
-};
-
-template <>
-struct DataTypeToNative<DataType::Float64> {
-    using type = double;
-};
-
-template <>
-struct DataTypeToNative<DataType::Complex32> {
-    using type = std::complex<float>;
-};
-
-template <>
-struct DataTypeToNative<DataType::Complex64> {
-    using type = std::complex<double>;
-};
+std::string dtype_to_string(dtype_t dtype);
 
 /**
- * @brief Helper alias to get the C++ type from a DataType
- */
-template <DataType dtype>
-using dtype_t = typename DataTypeToNative<dtype>::type;
-
-/**
- * @brief Concept for numeric types
- */
-template <typename T>
-concept Numeric = std::is_arithmetic_v<T> || std::is_same_v<T, std::complex<float>> ||
-                  std::is_same_v<T, std::complex<double>>;
-
-/**
- * @brief Concept for tensor-compatible scalar types
- */
-template <typename T>
-concept Scalar = Numeric<T>;
-
-/**
- * @brief Concept for floating point types
- */
-template <typename T>
-concept FloatingPoint = std::is_floating_point_v<T>;
-
-/**
- * @brief Concept for integer types
- */
-template <typename T>
-concept Integer = std::is_integral_v<T>;
-
-/**
- * @brief Concept for complex number types
- */
-template <typename T>
-concept Complex = std::is_same_v<T, std::complex<float>> || std::is_same_v<T, std::complex<double>>;
-
-/**
- * @brief Get the DataType enum value from a C++ type
+ * @brief Get size in bytes for a given data type
  *
- * @tparam T The C++ type
- * @return constexpr DataType The corresponding DataType enum value
- */
-template <typename T>
-constexpr DataType get_data_type() {
-    if constexpr (std::is_same_v<T, bool>)
-        return DataType::Bool;
-
-    else if constexpr (std::is_same_v<T, std::uint8_t>)
-        return DataType::Uint8;
-
-    else if constexpr (std::is_same_v<T, std::int8_t>)
-        return DataType::Uint8;
-
-    else if constexpr (std::is_same_v<T, std::int16_t>)
-        return DataType::Int16;
-
-    else if constexpr (std::is_same_v<T, std::int32_t>)
-        return DataType::Int32;
-
-    else if constexpr (std::is_same_v<T, std::int64_t>)
-        return DataType::Int64;
-
-    else if constexpr (std::is_same_v<T, float>)
-        return DataType::Float32;
-
-    else if constexpr (std::is_same_v<T, double>)
-        return DataType::Float64;
-
-    else if constexpr (std::is_same_v<T, std::complex<float>>)
-        return DataType::Complex32;
-
-    else if constexpr (std::is_same_v<T, std::complex<double>>)
-        return DataType::Complex64;
-
-    else
-        static_assert(always_false<T>, "Unsupported type for get_data_type");
-}
-
-// Helper for static assertions
-template <typename T>
-inline constexpr bool always_false = false;
-
-/**
- * @brief Get the size in bytes of a DataType
- *
- * @param dtype The DataType enum value
+ * @param dtype Data type
  * @return size_t Size in bytes
  */
-constexpr size_t data_type_size(DataType dtype) {
-    switch (dtype) {
-        case DataType::Bool:
-            return sizeof(bool);
+size_t dtype_size(dtype_t dtype);
 
-        case DataType::Uint8:
-            return sizeof(std::uint8_t);
+/**
+ * @brief Get the C++ type name for a given data type
+ *
+ * @param dtype Data type
+ * @return std::string C++ type name
+ */
+std::string dtype_to_type_name(dtype_t dtype);
 
-        case DataType::Int8:
-            return sizeof(std::int8_t);
+/**
+ * @brief Convert device type to string representation
+ *
+ * @param device_type Device type to convert
+ * @return std::string String representation of the device type
+ */
+std::string device_type_to_string(DeviceType device_type);
 
-        case DataType::Int16:
-            return sizeof(std::int16_t);
+/**
+ * @brief Check if two shapes are equal
+ *
+ * @param lhs First shape
+ * @param rhs Second shape
+ * @return bool True if shapes are equal
+ */
+bool shapes_equal(const shape_t& lhs, const shape_t& rhs);
 
-        case DataType::Int32:
-            return sizeof(std::int32_t);
+/**
+ * @brief Check if two strides are equal
+ *
+ * @param lhs First stride
+ * @param rhs Second stride
+ * @return bool True if strides are equal
+ */
+bool strides_equal(const stride_t& lhs, const stride_t& rhs);
 
-        case DataType::Int64:
-            return sizeof(std::int64_t);
+/**
+ * @brief Calculate the total number of elements from a shape
+ *
+ * @param shape Tensor shape
+ * @return size_t Total number of elements
+ */
+size_t calculate_size(const shape_t& shape);
 
-        case DataType::Float16:
-            return 2;
+/**
+ * @brief Calculate strides for a given shape using the specified memory layout
+ *
+ * @param shape Tensor shape
+ * @param layout Memory layout (default: RowMajor)
+ * @return stride_t Calculated strides
+ */
+stride_t calculate_strides(const shape_t& shape, MemoryLayout layout = MemoryLayout::RowMajor);
 
-        case DataType::Float32:
-            return sizeof(float);
+/**
+ * @brief Convert a linear index to multi-dimensional indices
+ *
+ * @param linear_index Linear (flat) index
+ * @param shape Tensor shape
+ * @param strides Tensor strides
+ * @return std::vector<index_t> Multi-dimensional indices
+ */
+std::vector<index_t> linear_index_to_indices(size_t linear_index, const shape_t& shape,
+                                             const stride_t& strides);
 
-        case DataType::Float64:
-            return sizeof(double);
+/**
+ * @brief Convert multi-dimensional indices to a linear index
+ *
+ * @param indices Multi-dimensional indices
+ * @param strides Tensor strides
+ * @return size_t Linear (flat) index
+ */
+size_t indices_to_linear_index(const std::vector<index_t>& indices, const stride_t& strides);
 
-        case DataType::Complex32:
-            return sizeof(std::complex<float>);
+/**
+ * @brief Check if a shape is valid (all dimensions > 0)
+ *
+ * @param shape Shape to check
+ * @return bool True if shape is valid
+ */
+bool is_valid_shape(const shape_t& shape);
 
-        case DataType::Complex64:
-            return sizeof(std::complex<double>);
+/**
+ * @brief Check if a tensor with the given shape and strides is contiguous
+ * in memory
+ *
+ * @param shape Tensor shape
+ * @param strides Tensor strides
+ * @return bool True if tensor is contiguous
+ */
+bool is_contiguous(const shape_t& shape, const stride_t& strides);
 
-        default:
-            return 0;
-    }
+/**
+ * @brief Create a shape from an initializer list
+ *
+ * @param dims Dimensions
+ * @return shape_t Shape object
+ */
+inline shape_t make_shape(std::initializer_list<index_t> dims) {
+    return shape_t(dims);
 }
 
 /**
- * @brief Convert a DataType to a human-readable string
+ * @brief Variadic function to create a shape
  *
- * @param dtype The DataType enum value
- * @return std::string String representation
+ * @tparam Args Argument types
+ * @param first First dimension
+ * @param args Additional dimensions
+ * @return shape_t Shape object
  */
-inline std::string data_type_to_string(DataType dtype) {
-    switch (dtype) {
-        case DataType::Bool:
-            return "bool";
+template <typename... Args>
+inline shape_t make_shape(index_t first, Args... args) {
+    shape_t result = {first};
+    shape_t rest = make_shape({static_cast<index_t>(args)...});
 
-        case DataType::Uint8:
-            return "uint8";
-
-        case DataType::Int8:
-            return "int8";
-
-        case DataType::Int16:
-            return "int16";
-
-        case DataType::Int32:
-            return "int32";
-
-        case DataType::Int64:
-            return "int64";
-
-        case DataType::Float16:
-            return "float16";
-
-        case DataType::Float32:
-            return "float32";
-
-        case DataType::Float64:
-            return "float64";
-
-        case DataType::Complex32:
-            return "complex32";
-
-        case DataType::Complex64:
-            return "complex64";
-            
-        default:
-            return "unknown";
-    }
+    result.insert(result.end(), rest.begin(), rest.end());
+    return result;
 }
+
+/**
+ * @brief Base case for the variadic makeShape function
+ *
+ * @return shape_t Empty shape
+ */
+inline shape_t make_shape() {
+    return {};
+}
+
+/**
+ * @brief Write a shape to an output stream
+ *
+ * @param os Output stream
+ * @param shape Shape to write
+ * @return std::ostream& Modified output stream
+ */
+std::ostream& operator<<(std::ostream& os, const shape_t& shape);
+
+/**
+ * @brief Write strides to an output stream
+ *
+ * @param os Output stream
+ * @param strides Strides to write
+ * @return std::ostream& Modified output stream
+ */
+std::ostream& operator<<(std::ostream& os, const stride_t& strides);
 }  // namespace brezel

@@ -1,0 +1,30 @@
+{
+  "name": "brezel",
+  "version": "0.1.0",
+  "description": "A modern C++ tensor framework inspired by PyTorch",
+  "homepage": "https://github.com/salgue441/brezel",
+  "license": "MIT",
+  "supports": "cxx20",
+  "dependencies": ["fmt", "spdlog", "eigen3", "openblas", "catch2"],
+  "features": {
+    "cuda": {
+      "description": "CUDA Support",
+      "dependencies": ["cuda"]
+    },
+    "test": {
+      "description": "Testing dependencies",
+      "dependencies": ["catch2"]
+    },
+    "benchmark": {
+      "description": "Benchmarking dependencies",
+      "dependencies": ["benchmark"]
+    }
+  },
+  "overrides": [
+    {
+      "name": "fmt",
+      "version": "9.1.0"
+    }
+  ],
+  "builtin-baseline": "a42af01b72c28a8e1d7b48107b33e4f286a55ef6"
+}

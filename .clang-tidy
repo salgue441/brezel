@@ -1,0 +1,182 @@
+---
+# Brezel C++ Static Analysis Configuration
+Checks: >
+  -*,
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  concurrency-*,
+  cppcoreguidelines-*,
+  hicpp-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  -cppcoreguidelines-pro-type-union-access,
+  -cppcoreguidelines-pro-type-vararg,
+  -hicpp-braces-around-statements,
+  -hicpp-vararg,
+  -misc-non-private-member-variables-in-classes,
+  -modernize-use-nodiscard,
+  -modernize-use-trailing-return-type,
+  -readability-braces-around-statements,
+  -readability-identifier-length,
+  -readability-magic-numbers
+
+WarningsAsErrors: ""
+HeaderFilterRegex: ".*"
+AnalyzeTemporaryDtors: false
+FormatStyle: file
+CheckOptions:
+  # General customizations
+  readability-implicit-bool-conversion.AllowIntegerConditions: true
+
+  # Names and identifiers
+  readability-identifier-naming.ClassCase: CamelCase
+  readability-identifier-naming.ConstexprVariableCase: CamelCase
+  readability-identifier-naming.ConstexprVariablePrefix: k
+  readability-identifier-naming.EnumCase: CamelCase
+  readability-identifier-naming.EnumConstantCase: CamelCase
+  readability-identifier-naming.EnumConstantPrefix: k
+  readability-identifier-naming.FunctionCase: camelBack
+  readability-identifier-naming.GlobalConstantCase: CamelCase
+  readability-identifier-naming.GlobalConstantPrefix: k
+  readability-identifier-naming.GlobalVariableCase: camelBack
+  readability-identifier-naming.GlobalVariablePrefix: g_
+  readability-identifier-naming.MacroDefinitionCase: UPPER_CASE
+  readability-identifier-naming.MemberCase: camelBack
+  readability-identifier-naming.MemberPrefix: m_
+  readability-identifier-naming.NamespaceCase: lower_case
+  readability-identifier-naming.ParameterCase: camelBack
+  readability-identifier-naming.PrivateMemberCase: camelBack
+  readability-identifier-naming.PrivateMemberPrefix: m_
+  readability-identifier-naming.ProtectedMemberCase: camelBack
+  readability-identifier-naming.ProtectedMemberPrefix: m_
+  readability-identifier-naming.PublicMemberCase: camelBack
+  readability-identifier-naming.StaticConstantCase: CamelCase
+  readability-identifier-naming.StaticConstantPrefix: s_
+  readability-identifier-naming.StaticVariableCase: camelBack
+  readability-identifier-naming.StaticVariablePrefix: s_
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.TemplateParameterCase: CamelCase
+  readability-identifier-naming.TemplateTemplateParameterCase: CamelCase
+  readability-identifier-naming.TypeAliasCase: CamelCase
+  readability-identifier-naming.TypedefCase: CamelCase
+  readability-identifier-naming.UnionCase: CamelCase
+  readability-identifier-naming.VariableCase: camelBack
+
+  # Other checks customization
+  bugprone-argument-comment.StrictMode: true
+  bugprone-easily-swappable-parameters.MinimumLength: 4
+  bugprone-misplaced-widening-cast.CheckImplicitCasts: true
+  bugprone-sizeof-expression.WarnOnSizeOfConstant: true
+  bugprone-sizeof-expression.WarnOnSizeOfIntegerExpression: true
+  bugprone-suspicious-enum-usage.StrictMode: true
+  bugprone-unused-return-value.CheckedFunctions: >
+    ::std::async;::std::launder;::std::remove;::std::remove_if;::std::unique;
+    ::std::unique_ptr::release;::std::basic_string::empty;::std::vector::empty;
+    ::std::back_inserter;::std::distance;::std::find;::std::find_if;::std::inserter;
+    ::std::lower_bound;::std::make_pair;::std::map::count;::std::map::find;
+    ::std::map::lower_bound;::std::multimap::equal_range;::std::multimap::upper_bound;
+    ::std::set::count;::std::set::find;::std::setfill;::std::setprecision;::std::setw;
+    ::std::upper_bound;::std::vector::at;::bsearch;::ferror;::feof;::isalnum;::isalpha;
+    ::isblank;::iscntrl;::isdigit;::isgraph;::islower;::isprint;::ispunct;::isspace;
+    ::isupper;::iswalnum;::iswprint;::iswspace;::isxdigit;::memchr;::memcmp;::strcmp;
+    ::strcoll;::strncmp;::strpbrk;::strrchr;::strspn;::strstr;::wcscmp;::access;
+    ::bind;::connect;::difftime;::dlsym;::fnmatch;::getaddrinfo;::getopt;::htonl;
+    ::htons;::iconv_open;::inet_addr;::isascii;::isatty;::mmap;::newlocale;::openat;
+    ::pathconf;::pthread_equal;::pthread_getspecific;::pthread_mutex_trylock;
+    ::readdir;::readlink;::recvmsg;::regexec;::scandir;::semget;::setjmp;::shm_open;
+    ::shmget;::sigismember;::strcasecmp;::strsignal;::ttyname
+  cert-dcl16-c.NewSuffixes: "L;LL;LU;LLU"
+  cert-oop54-cpp.WarnOnlyIfThisHasSuspiciousField: true
+  cert-str34-c.DiagnoseSignedUnsignedCharComparisons: true
+  cppcoreguidelines-explicit-virtual-functions.AllowOverrideAndFinal: true
+  cppcoreguidelines-explicit-virtual-functions.FinalSpelling: final
+  cppcoreguidelines-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic: true
+  google-readability-braces-around-statements.ShortStatementLines: 2
+  google-readability-function-size.StatementThreshold: 800
+  google-readability-namespace-comments.ShortNamespaceLines: 10
+  google-readability-namespace-comments.SpacesBeforeComments: 2
+  misc-const-correctness.AnalyzeReferences: true
+  misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic: true
+  misc-non-private-member-variables-in-classes.IgnorePublicMemberVariables: true
+  modernize-loop-convert.MaxCopySize: 16
+  modernize-loop-convert.MinConfidence: reasonable
+  modernize-loop-convert.NamingStyle: CamelCase
+  modernize-make-shared.IgnoreMacros: true
+  modernize-make-shared.IncludeStyle: google
+  modernize-make-unique.IgnoreMacros: true
+  modernize-make-unique.IncludeStyle: google
+  modernize-pass-by-value.IncludeStyle: google
+  modernize-replace-auto-ptr.IncludeStyle: google
+  modernize-replace-random-shuffle.IncludeStyle: google
+  modernize-use-auto.MinTypeNameLength: 5
+  modernize-use-auto.RemoveStars: true
+  modernize-use-default-member-init.IgnoreMacros: true
+  modernize-use-default-member-init.UseAssignment: false
+  modernize-use-emplace.ContainersWithPushBack: "::std::vector;::std::list;::std::deque"
+  modernize-use-emplace.SmartPointers: "::std::shared_ptr;::std::unique_ptr;::std::auto_ptr;::std::weak_ptr"
+  modernize-use-emplace.TupleMakeFunctions: "::std::make_pair;::std::make_tuple"
+  modernize-use-emplace.TupleTypes: "::std::pair;::std::tuple"
+  modernize-use-equals-default.IgnoreMacros: true
+  modernize-use-equals-delete.IgnoreMacros: true
+  modernize-use-nodiscard.ReplacementString: "[[nodiscard]]"
+  modernize-use-noexcept.ReplacementString: noexcept
+  modernize-use-noexcept.UseNoexceptFalse: true
+  modernize-use-nullptr.NullMacros: "NULL"
+  modernize-use-override.AllowOverrideAndFinal: true
+  modernize-use-override.FinalSpelling: final
+  modernize-use-override.IgnoreDestructors: false
+  modernize-use-override.OverrideSpelling: override
+  modernize-use-transparent-functors.SafeMode: true
+  performance-faster-string-find.StringLikeClasses: "::std::basic_string;::std::basic_string_view"
+  performance-for-range-copy.AllowedTypes: "std::array;std::vector"
+  performance-for-range-copy.WarnOnAllAutoCopies: true
+  performance-inefficient-string-concatenation.StrictMode: true
+  performance-inefficient-vector-operation.EnableProto: true
+  performance-inefficient-vector-operation.VectorLikeClasses: "::std::vector"
+  performance-move-const-arg.CheckTriviallyCopyableMove: true
+  performance-move-constructor-init.IncludeStyle: google
+  performance-no-automatic-move.AllowedTypes: ""
+  performance-type-promotion-in-math-fn.IncludeStyle: google
+  performance-unnecessary-copy-initialization.AllowedTypes: ""
+  performance-unnecessary-value-param.AllowedTypes: ""
+  performance-unnecessary-value-param.IncludeStyle: google
+  portability-simd-intrinsics.Std: ""
+  portability-simd-intrinsics.Suggest: true
+  readability-else-after-return.WarnOnConditionVariables: true
+  readability-else-after-return.WarnOnUnfixable: true
+  readability-function-cognitive-complexity.IgnoreMacros: true
+  readability-function-cognitive-complexity.Threshold: 25
+  readability-function-size.BranchThreshold: 10
+  readability-function-size.LineThreshold: 100
+  readability-function-size.NestingThreshold: 5
+  readability-function-size.ParameterThreshold: 5
+  readability-function-size.StatementThreshold: 50
+  readability-function-size.VariableThreshold: 10
+  readability-identifier-length.IgnoredLoopCounterNames: "^[ijk_]$"
+  readability-identifier-length.IgnoredParameterNames: "^[n]$"
+  readability-identifier-length.IgnoredVariableNames: "^[x|y|z]$"
+  readability-identifier-length.MinimumExceptionNameLength: 2
+  readability-identifier-length.MinimumLoopCounterNameLength: 2
+  readability-identifier-length.MinimumParameterNameLength: 3
+  readability-identifier-length.MinimumVariableNameLength: 3
+  readability-implicit-bool-conversion.AllowPointerConditions: true
+  readability-inconsistent-declaration-parameter-name.IgnoreMacros: true
+  readability-qualified-auto.AddConstToQualified: true
+  readability-redundant-declaration.IgnoreMacros: true
+  readability-redundant-member-init.IgnoreBaseInCopyConstructors: true
+  readability-redundant-smartptr-get.IgnoreMacros: true
+  readability-redundant-string-init.StringNames: "::std::basic_string"
+  readability-simplify-boolean-expr.ChainedConditionalAssignment: true
+  readability-simplify-boolean-expr.ChainedConditionalReturn: true
+  readability-simplify-subscript-expr.Types: "::std::array;::std::vector;::std::deque;::std::string"
+  readability-static-accessed-through-instance.NameSpecifierNestingThreshold: 3
+  readability-uppercase-literal-suffix.IgnoreMacros: true
+  readability-uppercase-literal-suffix.NewSuffixes: "L;LL;LU;LLU"

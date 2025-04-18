@@ -18,30 +18,12 @@ endif()
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-# Options
-option(BREZEL_BUILD_TESTS "Build tests" ON)
-option(BREZEL_BUILD_EXAMPLES "Build examples" ON)
-option(BREZEL_BUILD_BENCHMARKS "Build benchmarks" OFF)
-option(BREZEL_USE_CUDA "Enable CUDA support" OFF)
-option(BREZEL_USE_OPENMP "Enable OpenMP support" ON)
-option(BREZEL_USE_BLAS "Enable BLAS/LAPACK support" ON)
-option(BREZEL_COMPILE_EXTENSIONS "Compile optional performance extensions" OFF)
-option(BREZEL_ENABLE_PROFILING "Enable performance profiling" OFF)
-option(BREZEL_USE_DOCKER "Use Docker for building and testing" ON)
-option(BREZEL_BUILD_DOCS "Build documentation" OFF)
-option(BREZEL_DOCS_WITH_BUILD "Build documentation as part of the default build" OFF)
-
 # Add CMake modules path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# Include custom CMake modules that don't depend on targets
-include(cmake/CompilerWarnings.cmake)
-include(cmake/Sanitizers.cmake)
-include(cmake/StaticAnalyzers.cmake)
-include(cmake/Dependencies.cmake)
-include(cmake/Workflow.cmake)
-include(cmake/Documentation.cmake)
-include(cmake/Packaging.cmake)
+# Options
+include(cmake/Options.cmake)
+include(cmake/Utilities.cmake)
 
 # Set output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -62,28 +44,50 @@ target_include_directories(brezel
 # Set compile features
 target_compile_features(brezel INTERFACE cxx_std_20)
 
-# Add compiler warnings
-set_project_warnings(brezel)
+# Apply compiler settings after the target is created
+include(cmake/CompilerSettings.cmake)
+brezel_setup_target(brezel)
 
-# Apply sanitizers if enabled
-enable_sanitizers(brezel)
-
-# Link with dependencies
-# fmt is required
+# Find dependencies
+find_package(fmt REQUIRED)
 target_link_libraries(brezel INTERFACE fmt::fmt)
 
-# Add conditional compile definitions and dependencies AFTER target is created
-if(BREZEL_USE_OPENMP)
-  find_package(OpenMP REQUIRED)
-  target_link_libraries(brezel INTERFACE OpenMP::OpenMP_CXX)
-  target_compile_definitions(brezel INTERFACE BREZEL_WITH_OPENMP)
+find_package(Threads REQUIRED)
+target_link_libraries(brezel INTERFACE Threads::Threads)
+
+if(BREZEL_USE_SPDLOG)
+  find_package(spdlog REQUIRED)
+  target_link_libraries(brezel INTERFACE spdlog::spdlog)
+  target_compile_definitions(brezel INTERFACE BREZEL_WITH_SPDLOG)
+endif()
+
+if(BREZEL_USE_EIGEN)
+  find_package(Eigen3 REQUIRED)
+  target_link_libraries(brezel INTERFACE Eigen3::Eigen)
+  target_compile_definitions(brezel INTERFACE BREZEL_WITH_EIGEN)
 endif()
 
 if(BREZEL_USE_BLAS)
   find_package(BLAS REQUIRED)
-  find_package(LAPACK REQUIRED)
-  target_link_libraries(brezel INTERFACE ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
-  target_compile_definitions(brezel INTERFACE BREZEL_WITH_BLAS)
+
+  # LAPACK may not be required, so let's make it optional for now
+  find_package(LAPACK QUIET)
+
+  if(BLAS_FOUND)
+    target_link_libraries(brezel INTERFACE ${BLAS_LIBRARIES})
+    target_compile_definitions(brezel INTERFACE BREZEL_WITH_BLAS)
+  endif()
+
+  if(LAPACK_FOUND)
+    target_link_libraries(brezel INTERFACE ${LAPACK_LIBRARIES})
+    target_compile_definitions(brezel INTERFACE BREZEL_WITH_LAPACK)
+  endif()
+endif()
+
+if(BREZEL_USE_OPENMP)
+  find_package(OpenMP REQUIRED)
+  target_link_libraries(brezel INTERFACE OpenMP::OpenMP_CXX)
+  target_compile_definitions(brezel INTERFACE BREZEL_WITH_OPENMP)
 endif()
 
 if(BREZEL_USE_CUDA)
@@ -93,61 +97,38 @@ if(BREZEL_USE_CUDA)
   target_link_libraries(brezel INTERFACE ${CUDA_LIBRARIES})
 endif()
 
-if(BREZEL_ENABLE_PROFILING)
-  target_compile_definitions(brezel INTERFACE BREZEL_ENABLE_PROFILING)
-endif()
-
-# Add conditional compile definitions set in Dependencies.cmake
-if(BREZEL_WITH_EIGEN)
-  target_compile_definitions(brezel INTERFACE BREZEL_WITH_EIGEN)
-  target_link_libraries(brezel INTERFACE Eigen3::Eigen)
-endif()
-
-if(BREZEL_WITH_SPDLOG)
-  target_compile_definitions(brezel INTERFACE BREZEL_WITH_SPDLOG)
-  target_link_libraries(brezel INTERFACE spdlog::spdlog)
-endif()
-
-# Check for threading library support
-find_package(Threads REQUIRED)
-target_link_libraries(brezel INTERFACE Threads::Threads)
-
-# Conditionally compile extensions
+# Add subdirectories
 if(BREZEL_COMPILE_EXTENSIONS)
   add_subdirectory(src)
 endif()
 
-# Add subdirectories for components
 if(BREZEL_BUILD_TESTS)
-  enable_testing()
-  add_subdirectory(tests)
+  find_package(Catch2 CONFIG REQUIRED)
+  include(CTest)
+
+  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+    add_subdirectory(tests)
+  endif()
 endif()
 
-# if(BREZEL_BUILD_EXAMPLES)
-# add_subdirectory(examples)
-# endif()
-
-# if(BREZEL_BUILD_BENCHMARKS)
-# add_subdirectory(benchmarks)
-# endif()
-
-# Add Docker targets if Docker is enabled
-if(BREZEL_USE_DOCKER)
-  brezel_add_docker_targets()
+if(BREZEL_BUILD_EXAMPLES)
+  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples")
+    add_subdirectory(examples)
+  endif()
 endif()
 
-# Add code formatting target and documentation
-brezel_enable_formatting()
-brezel_setup_documentation()
+if(BREZEL_BUILD_BENCHMARKS)
+  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/benchmarks")
+    add_subdirectory(benchmarks)
+  endif()
+endif()
 
 # Installation
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 # Skip installation in CI environments
-if(DEFINED ENV{CI} OR CI)
-  message(STATUS "Running in CI environment - skipping install targets to avoid dependency issues")
-else()
+if(NOT DEFINED ENV{CI} OR NOT CI)
   install(
     DIRECTORY include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
@@ -167,10 +148,40 @@ else()
     COMPATIBILITY SameMajorVersion
   )
 
+  # Export targets
+  install(
+    TARGETS brezel
+    EXPORT brezelTargets
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  )
+
+  install(
+    EXPORT brezelTargets
+    FILE brezelTargets.cmake
+    NAMESPACE brezel::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/brezel
+  )
+
   install(
     FILES
     ${CMAKE_CURRENT_BINARY_DIR}/brezelConfig.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/brezelConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/brezel
   )
+
+  # Create uninstall target
+  if(NOT TARGET uninstall)
+    configure_file(
+      "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+      "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+      IMMEDIATE @ONLY
+    )
+
+    add_custom_target(uninstall
+      COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+    )
+  endif()
 endif()
+
+# Print configuration summary
+include(cmake/Summary.cmake)
