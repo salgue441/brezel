@@ -12,6 +12,7 @@ function(brezel_add_test test_name)
   )
 
   add_executable(${test_name} ${TEST_SOURCES})
+  link_directories(${CMAKE_BINARY_DIR}/lib)
 
   target_link_libraries(${test_name}
     PRIVATE

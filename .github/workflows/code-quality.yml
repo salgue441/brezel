@@ -1,0 +1,41 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [main]
+
+  pull_request:
+    branches: [main]
+    paths:
+      - "**.cpp"
+      - "**.hpp"
+      - "**.h"
+
+jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install clang-format
+        run: sudo apt-get install -y clang-format
+      - name: Run clang-format
+        run: |
+          find include src tests -name "*.cpp" -o -name "*.hpp" | xargs clang-format -i --style=file
+          git diff --exit-code || (echo "Code formatting issues found. Run clang-format locally." && exit 1)
+
+  cppcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install cppcheck
+        run: sudo apt-get install -y cppcheck
+      - name: Run cppcheck
+        run: |
+          cppcheck --enable=all --std=c++20 --error-exitcode=1 --suppress=missingIncludeSystem \
+          -I include/ src/ tests/ --output-file=cppcheck_report.txt
+      - name: Upload report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cppcheck-report
+          path: cppcheck_report.txt

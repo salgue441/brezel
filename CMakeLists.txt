@@ -98,12 +98,7 @@ if(BREZEL_USE_CUDA)
 endif()
 
 # Add subdirectories
-if(BREZEL_COMPILE_EXTENSIONS)
-  add_subdirectory(src)
-  
-  # Link the interface library to the core implementation
-  target_link_libraries(brezel INTERFACE brezel::core)
-endif()
+add_subdirectory(src)
 
 if(BREZEL_BUILD_TESTS)
   find_package(Catch2 CONFIG REQUIRED)

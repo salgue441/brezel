@@ -2,7 +2,7 @@
 option(BREZEL_BUILD_TESTS "Build tests" ON)
 option(BREZEL_BUILD_EXAMPLES "Build examples" ON)
 option(BREZEL_BUILD_BENCHMARKS "Build benchmarks" OFF)
-option(BREZEL_COMPILE_EXTENSIONS "Compile optional performance extensions" OFF)
+option(BREZEL_COMPILE_EXTENSIONS "Compile optional performance extensions" ON)
 option(BREZEL_BUILD_DOCS "Build documentation" OFF)
 
 # Feature options
