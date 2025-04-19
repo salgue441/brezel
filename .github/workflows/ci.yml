@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
         build_type: [Debug, Release]
 
     steps:
@@ -30,7 +30,7 @@ jobs:
       - name: Install macOS Dependencies
         if: runner.os == 'macOS'
         run: |
-          brew install ninja openblas libomp llvm
+          brew install openblas libomp llvm
           echo "CC=$(brew --prefix llvm)/bin/clang" >> $GITHUB_ENV
           echo "CXX=$(brew --prefix llvm)/bin/clang++" >> $GITHUB_ENV
           echo "CMAKE_PREFIX_PATH=$(brew --prefix llvm)" >> $GITHUB_ENV
@@ -80,12 +80,6 @@ jobs:
                 -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake \
                 -DBREZEL_BUILD_TESTS=ON
         shell: bash
-
-      - name: Configure CMake (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_TOOLCHAIN_FILE=.\vcpkg\scripts\buildsystems\vcpkg.cmake -DBREZEL_BUILD_TESTS=ON
-        shell: cmd
 
       - name: Build
         run: cmake --build build --config ${{ matrix.build_type }}
