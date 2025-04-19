@@ -25,80 +25,73 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ninja-build libopenblas-dev libomp-dev
+        shell: bash
 
       - name: Install macOS Dependencies
         if: runner.os == 'macOS'
         run: |
-          brew install ninja openblas libomp
-          echo "Setting up LLVM OpenMP for macOS"
-          export CPPFLAGS="$CPPFLAGS -Xpreprocessor -fopenmp"
-          export CXXFLAGS="$CXXFLAGS -Xpreprocessor -fopenmp"
-          export LDFLAGS="$LDFLAGS -lomp"
-          echo "CPPFLAGS=$CPPFLAGS" >> $GITHUB_ENV
-          echo "CXXFLAGS=$CXXFLAGS" >> $GITHUB_ENV
-          echo "LDFLAGS=$LDFLAGS" >> $GITHUB_ENV
-
-      # Cache vcpkg to speed up builds
-      - name: Cache vcpkg
-        uses: actions/cache@v3
-        id: vcpkg-cache
-        with:
-          path: |
-            ${{ github.workspace }}/vcpkg
-            !${{ github.workspace }}/vcpkg/buildtrees
-            !${{ github.workspace }}/vcpkg/packages
-            !${{ github.workspace }}/vcpkg/downloads
-          key: vcpkg-${{ runner.os }}-${{ hashFiles('**/vcpkg.json') }}
-          restore-keys: |
-            vcpkg-${{ runner.os }}-
-
-      # Clone vcpkg with clean checkout
-      - name: Clone vcpkg
-        if: steps.vcpkg-cache.outputs.cache-hit != 'true'
-        run: |
-          git clone https://github.com/microsoft/vcpkg.git "${{ github.workspace }}/vcpkg"
+          brew install ninja openblas libomp llvm
+          echo "CC=$(brew --prefix llvm)/bin/clang" >> $GITHUB_ENV
+          echo "CXX=$(brew --prefix llvm)/bin/clang++" >> $GITHUB_ENV
+          echo "CMAKE_PREFIX_PATH=$(brew --prefix llvm)" >> $GITHUB_ENV
         shell: bash
 
-      # Bootstrap vcpkg based on platform
-      - name: Bootstrap vcpkg (Unix)
-        if: runner.os != 'Windows'
-        run: |
-          ${{ github.workspace }}/vcpkg/bootstrap-vcpkg.sh -disableMetrics
-        shell: bash
-
-      - name: Bootstrap vcpkg (Windows)
+      - name: Install Windows Dependencies
         if: runner.os == 'Windows'
         run: |
-          cd "${{ github.workspace }}\vcpkg"
+          choco install ninja
+        shell: powershell
+
+      - name: Install vcpkg (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          ./bootstrap-vcpkg.sh -disableMetrics
+        shell: bash
+
+      - name: Install vcpkg (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
           .\bootstrap-vcpkg.bat -disableMetrics
         shell: cmd
 
       - name: Configure CMake (macOS)
         if: runner.os == 'macOS'
         run: |
-          cmake -B ${{ github.workspace }}/build -S ${{ github.workspace }} \
+          cmake -B build -S . \
                 -G Ninja \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-                -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake \
+                -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake \
                 -DBREZEL_BUILD_TESTS=ON \
                 -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp" \
                 -DOpenMP_CXX_LIB_NAMES="omp" \
                 -DOpenMP_omp_LIBRARY=$(brew --prefix libomp)/lib/libomp.dylib
         shell: bash
 
-      - name: Configure CMake (Non-macOS)
-        if: runner.os != 'macOS'
+      - name: Configure CMake (Linux)
+        if: runner.os == 'Linux'
         run: |
-          cmake -B ${{ github.workspace }}/build -S ${{ github.workspace }} \
+          cmake -B build -S . \
                 -G Ninja \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-                -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake \
+                -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake \
                 -DBREZEL_BUILD_TESTS=ON
         shell: bash
 
+      - name: Configure CMake (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_TOOLCHAIN_FILE=.\vcpkg\scripts\buildsystems\vcpkg.cmake -DBREZEL_BUILD_TESTS=ON
+        shell: cmd
+
       - name: Build
-        run: cmake --build ${{ github.workspace }}/build --config ${{ matrix.build_type }}
+        run: cmake --build build --config ${{ matrix.build_type }}
+        shell: bash
 
       - name: Test
-        working-directory: ${{ github.workspace }}/build
         run: ctest -C ${{ matrix.build_type }} --output-on-failure
+        working-directory: build
+        shell: bash

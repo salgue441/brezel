@@ -215,6 +215,29 @@ inline shape_t make_shape() {
 }
 
 /**
+ * @brief Template function to write a vector of indices to an output stream
+ *
+ * @tparam VecT Vector type (should be a vector of index_t)
+ * @param os Output stream
+ * @param vec Vector to write
+ * @return std::ostream& Modified output stream
+ */
+template <typename VecT>
+std::ostream& print_index_vector(std::ostream& os, const VecT& vec) {
+    os << "[";
+
+    for (size_t i = 0; i < vec.size(); ++i) {
+        os << vec[i];
+        if (i < vec.size() - 1) {
+            os << ", ";
+        }
+    }
+
+    os << "]";
+    return os;
+}
+
+/**
  * @brief Write a shape to an output stream
  *
  * @param os Output stream
@@ -223,12 +246,6 @@ inline shape_t make_shape() {
  */
 std::ostream& operator<<(std::ostream& os, const shape_t& shape);
 
-/**
- * @brief Write strides to an output stream
- *
- * @param os Output stream
- * @param strides Strides to write
- * @return std::ostream& Modified output stream
- */
-std::ostream& operator<<(std::ostream& os, const stride_t& strides);
+void print_strides(std::ostream& os, const stride_t& strides);
+
 }  // namespace brezel

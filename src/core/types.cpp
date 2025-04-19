@@ -193,7 +193,6 @@ bool is_contiguous(const shape_t& shape, const stride_t& strides) {
 
 std::ostream& operator<<(std::ostream& os, const shape_t& shape) {
     os << "[";
-
     for (size_t i = 0; i < shape.size(); ++i) {
         os << shape[i];
         if (i < shape.size() - 1) {
@@ -205,17 +204,16 @@ std::ostream& operator<<(std::ostream& os, const shape_t& shape) {
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const stride_t& strides) {
+void print_strides(std::ostream& os, const stride_t& strides) {
     os << "[";
-
     for (size_t i = 0; i < strides.size(); ++i) {
         os << strides[i];
+
         if (i < strides.size() - 1) {
             os << ", ";
         }
     }
 
     os << "]";
-    return os;
 }
 }  // namespace brezel

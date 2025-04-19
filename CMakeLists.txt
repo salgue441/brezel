@@ -100,6 +100,9 @@ endif()
 # Add subdirectories
 if(BREZEL_COMPILE_EXTENSIONS)
   add_subdirectory(src)
+  
+  # Link the interface library to the core implementation
+  target_link_libraries(brezel INTERFACE brezel::core)
 endif()
 
 if(BREZEL_BUILD_TESTS)
