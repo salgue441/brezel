@@ -2,7 +2,8 @@
 
 # Organize source files by component for better maintainability
 set(BREZEL_CORE_SOURCES
-  core/types.cpp
+
+  # core/types.cpp
 
   # Add more core sources as they're created
   # core/tensor.cpp
