@@ -1,6 +1,6 @@
 # Brezel: Modern C++20 Tensor Framework
 
-![Banner]()
+![Banner](./docs/banner_brezel.png)
 
 ## Overview
 

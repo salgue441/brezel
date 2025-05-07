@@ -597,3 +597,5 @@ Tensor operator-(const Scalar& scalar, const Tensor& tensor);
 Tensor operator*(const Scalar& scalar, const Tensor& tensor);
 Tensor operator/(const Scalar& scalar, const Tensor& tensor);
 }  // namespace brezel
+
+#include "tensor.inl"

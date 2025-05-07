@@ -1,6 +1,9 @@
 # Add test executable
 add_executable(simple_test
-  types_test.cpp
+  device_test.cpp
+  dtype_test.cpp
+  scalar_test.cpp
+  shape_test.cpp
 )
 
 # Link against the correct target based on what's available
