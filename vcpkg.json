@@ -5,7 +5,7 @@
   "homepage": "https://github.com/salgue441/brezel",
   "license": "MIT",
   "supports": "cxx20",
-  "dependencies": ["fmt", "spdlog", "eigen3", "openblas", "catch2"],
+  "dependencies": ["fmt", "spdlog", "eigen3", "openblas", "catch2", "boost"],
   "features": {
     "cuda": {
       "description": "CUDA Support",
