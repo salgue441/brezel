@@ -1,0 +1,99 @@
+# Build directories
+build/
+build-*/
+out/
+bin/
+lib/
+obj/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# Premake
+*.make
+Makefile
+*.vcxproj*
+*.sln
+
+# IDEs
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.vs/
+.idea/
+*.swp
+*.swo
+*~
+
+# Compilers
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+*.pdb
+*.ilk
+
+# Conan
+conandata.yml
+conanfile.txt
+conan.lock
+
+# vcpkg
+vcpkg_installed/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Coverage
+coverage/
+*.gcov
+*.gcda
+*.gcno
+lcov.info
+
+# Documentation
+docs/html/
+docs/latex/
+docs/doxygen_sqlite3.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# Package managers
+node_modules/
+*.tgz
+*.tar.gz
+
+# Benchmarks output
+benchmark_results/
+*.csv
+*.json
+profiling/
+
+# Testing
+test_results/
+gtest_*.xml

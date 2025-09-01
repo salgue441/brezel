@@ -1,0 +1,60 @@
+---
+Checks: >
+  *, -abseil-*, -android-*, -fuchsia-*, -google-*, -llvm-*, -objc-*, -zircon-*, -altera-*, -cert-dcl21-cpp, -cert-dcl58-cpp, -cert-err52-cpp, -cert-err60-cpp, -cert-flp30-c, -cert-msc32-c, -cert-msc51-cpp, -cert-str34-c, -cppcoreguidelines-explicit-virtual-functions, -cppcoreguidelines-non-private-member-variables-in-classes, -misc-non-private-member-variables-in-classes, -modernize-return-braced-init-list, -modernize-use-trailing-return-type, -modernize-avoid-c-arrays, -cppcoreguidelines-avoid-c-arrays, -hicpp-avoid-c-arrays, -cppcoreguidelines-pro-bounds-constant-array-index, -cppcoreguidelines-pro-bounds-array-to-pointer-decay, -hicpp-no-array-decay, -cppcoreguidelines-avoid-magic-numbers, -readability-magic-numbers, -clang-diagnostic-c++98-compat, -clang-diagnostic-c++98-compat-pedantic, -clang-diagnostic-pre-c++14-compat, -clang-diagnostic-pre-c++17-compat, -clang-diagnostic-pre-c++20-compat-pedantic, -google-readability-todo, -llvm-header-guard, -cppcoreguidelines-macro-usage, -cppcoreguidelines-pro-type-vararg, -hicpp-vararg
+
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+FormatStyle: file
+CheckOptions:
+- key: readability-identifier-naming.NamespaceCase
+  value: lower_case
+- key: readability-identifier-naming.ClassCase
+  value: CamelCase
+- key: readability-identifier-naming.StructCase
+  value: CamelCase
+- key: readability-identifier-naming.TemplateParameterCase
+  value: CamelCase
+- key: readability-identifier-naming.FunctionCase
+  value: lower_case
+- key: readability-identifier-naming.VariableCase
+  value: lower_case
+- key: readability-identifier-naming.ClassMemberCase
+  value: lower_case
+- key: readability-identifier-naming.ClassMemberSuffix
+  value: _
+- key: readability-identifier-naming.PrivateMemberSuffix
+  value: _
+- key: readability-identifier-naming.ProtectedMemberSuffix
+  value: _
+- key: readability-identifier-naming.EnumConstantCase
+  value: CamelCase
+- key: readability-identifier-naming.ConstexprVariableCase
+  value: CamelCase
+- key: readability-identifier-naming.GlobalConstantCase
+  value: CamelCase
+- key: readability-identifier-naming.MemberConstantCase
+  value: CamelCase
+- key: readability-identifier-naming.StaticConstantCase
+  value: CamelCase
+- key: readability-function-cognitive-complexity.IgnoreMacros
+  value: true
+- key: readability-function-cognitive-complexity.Threshold
+  value: 25
+- key: bugprone-easily-swappable-parameters.MinimumLength
+  value: 2
+- key: bugprone-easily-swappable-parameters.IgnoredParameterNames
+  value: ""
+- key: bugprone-easily-swappable-parameters.IgnoredParameterTypeSuffixes
+  value: "T;Iterator;Const;Ref;Ptr"
+- key: bugprone-reserved-identifier.Invert
+  value: false
+- key: bugprone-reserved-identifier.AllowedIdentifiers
+  value: ""
+- key: cert-dcl16-c.NewSuffixes
+  value: "L;LL;LU;LLU"
+- key: cert-oop54-cpp.WarnOnlyIfThisHasSuspiciousField
+  value: false
+- key: cppcoreguidelines-explicit-virtual-functions.IgnoreDestructors
+  value: true
+- key: cppcoreguidelines-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+  value: true

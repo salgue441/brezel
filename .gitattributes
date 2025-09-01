@@ -1,0 +1,94 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Source code
+*.c     text diff=cpp
+*.cc    text diff=cpp
+*.cxx   text diff=cpp
+*.cpp   text diff=cpp
+*.c++   text diff=cpp
+*.hpp   text diff=cpp
+*.h     text diff=cpp
+*.h++   text diff=cpp
+*.hh    text diff=cpp
+
+# CMake
+*.cmake text
+CMakeLists.txt text
+
+# Makefiles
+*.make text
+Makefile text
+
+# Documentation
+*.md text
+*.txt text
+*.rst text
+
+# Configuration
+*.ini text
+*.cfg text
+*.conf text
+*.config text
+*.json text
+*.yaml text
+*.yml text
+*.toml text
+
+# Scripts
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+*.fish text eol=lf
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Python
+*.py text diff=python
+*.pyx text diff=python
+*.pyw text diff=python
+
+# Binary files
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+*.a binary
+*.lib binary
+*.o binary
+*.obj binary
+
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text
+
+# Archives
+*.zip binary
+*.tar binary
+*.gz binary
+*.7z binary
+*.rar binary
+
+# Fonts
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+
+# Keep LF line endings for shell scripts
+*.sh eol=lf
+configure eol=lf
+
+# Keep CRLF for Windows batch files
+*.bat eol=crlf
+*.cmd eol=crlf
+
+# Large files (use Git LFS if needed)
+*.weights filter=lfs diff=lfs merge=lfs -text
+*.model filter=lfs diff=lfs merge=lfs -text
+*.data filter=lfs diff=lfs merge=lfs -text
