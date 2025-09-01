@@ -1,3 +1,30 @@
+/**
+ * @file concepts.hpp
+ * @author Carlos Salguero
+ * @brief Core contepts and type constraints for tensor library.
+ * @version 0.1
+ * @date 2025-09-01
+ *
+ * @copyright Copyright (c) 2025
+ *
+ * This file defines the concept system that constraints templates throughout
+ * the tensor library. The concepts are organized into several categories:
+ * - Type concepts: Arithmetic, integral, floating-point, scalar types
+ * - Range concepts: Iterators, ranges, and range categories
+ * - Callable concepts: Functions, predicates, and reduction operations
+ * - Type property concepts: Movable, copyable, constructible, comparable
+ * - Tensor-specific concepts: Shapes, strides, tensors, storage systems
+ * - Memory concepts: Allocators and memory pools
+ *
+ * These concepts enable:
+ * - Clear interface contracts for template parameters
+ * - Improved compiler error messages
+ * - SFINAE-friendly type constraints
+ * - Backward compatibility with pre-C++20 code
+ *
+ * @note This header depends on the C++20 concepts library and dtype system.
+ */
+
 #pragma once
 
 #include <concepts>

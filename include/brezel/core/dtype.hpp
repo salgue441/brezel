@@ -1,12 +1,23 @@
 /**
  * @file dtype.hpp
- * @author your name (you@domain.com)
- * @brief
+ * @author Carlos Salguero
+ * @brief Tensor data type system and utilities
  * @version 0.1
  * @date 2025-09-01
  *
  * @copyright Copyright (c) 2025
  *
+ * This file defines the core type system for the tensor library, including:
+ * - DType enum: Classification of all supported tensor element types
+ * - Type traits: Compile-time mapping between C++ types and DType values
+ * - Type predicates: Runtime checks for type categories (integer, float, etc.)
+ * - Type operations: Size, alignment, promotion, and visitation utilities
+ *
+ * The dtype system provides a unified way to handle both compile-time and
+ * runtime type information, enabling type-safe tensor operations and
+ * heterogeneous computation.
+ *
+ * @note This header has no dependencies beyond the C++ standard library.
  */
 
 #pragma once
