@@ -1,7 +1,7 @@
 /**
  * @file error.hpp
- * @author your name (you@domain.com)
- * @brief
+ * @author Carlos Salguero
+ * @brief Error handling definitions
  * @version 0.1
  * @date 2025-09-01
  *
@@ -15,7 +15,7 @@
 #include <utility>
 #include <variant>
 
-namespace tensor::error {
+namespace brezel::error {
 /**
  * @brief Error codes for tensor operations
  */
@@ -690,4 +690,4 @@ class Result<void, E> {
         }                                                                      \
         return std::forward<decltype(_tensor_result)>(_tensor_result).value(); \
     }()
-}  // namespace tensor::error
+}  // namespace brezel::error
